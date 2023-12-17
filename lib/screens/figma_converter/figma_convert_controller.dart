@@ -1,13 +1,12 @@
 import 'dart:developer';
 import 'package:bankwisewithgetx/configuration/config.dart';
-import 'package:bankwisewithgetx/services/converted_amount_function.dart';
 import 'package:bankwisewithgetx/services/fetch_data.dart';
 import 'package:bankwisewithgetx/services/google_sheets_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-class ConverterController extends GetxController {
+class FigmaConverterController extends GetxController {
   String selectedDate = '';
   String selectedFromCurrency = '';
   String selectedToCurrency = '';
@@ -17,11 +16,7 @@ class ConverterController extends GetxController {
   String selectedToCurrencyValue = "";
   final TextEditingController convertingAmountController =
       TextEditingController();
-  final TextEditingController fromCurrAmount = TextEditingController();
-  final TextEditingController toCurrAmount = TextEditingController();
   num convertedAmount = 0;
-  String tempCurrency = "";
-  num tempCurrencyValue = 0;
 
   final apiKey = GoogleApiConfig.apiKey;
   final spreadsheetId = GoogleApiConfig.SpreadsheetID;
@@ -72,7 +67,6 @@ class ConverterController extends GetxController {
     } else {
       selectedFromCurrencyValue =
           await getCurrencyValue(selectedDate, selectedFromCurrency);
-
       debugPrint(selectedFromCurrencyValue.toString());
     }
 
@@ -81,16 +75,6 @@ class ConverterController extends GetxController {
     } else {
       selectedToCurrencyValue =
           await getCurrencyValue(selectedDate, selectedToCurrency);
-    }
-
-    if (selectedFromCurrency != "PKR") {
-      selectedFromCurrencyValue =
-          (1 / num.parse(selectedFromCurrencyValue)).toString();
-    }
-
-    if (selectedToCurrency != "PKR") {
-      selectedToCurrencyValue =
-          (1 / num.parse(selectedToCurrencyValue)).toString();
     }
   }
 
@@ -128,61 +112,5 @@ class ConverterController extends GetxController {
     }
 
     return '';
-  }
-
-  updateFromCurrencyValue() async {
-    if (selectedFromCurrency == "PKR") {
-      selectedFromCurrencyValue = "1";
-    } else {
-      selectedFromCurrencyValue =
-          await getCurrencyValue(selectedDate, selectedFromCurrency);
-      selectedFromCurrencyValue =
-          (1 / num.parse(selectedFromCurrencyValue)).toString();
-
-      log("selectedFromCurrencyValue $selectedFromCurrencyValue");
-    }
-    fromCurrAmount.text = selectedFromCurrencyValue;
-  }
-
-  updateToCurrencyValue() async {
-    if (selectedToCurrency == "PKR") {
-      selectedToCurrencyValue = "1";
-    } else {
-      selectedToCurrencyValue =
-          await getCurrencyValue(selectedDate, selectedToCurrency);
-      selectedToCurrencyValue =
-          (1 / num.parse(selectedToCurrencyValue)).toString();
-      log("selectedToCurrencyValue $selectedToCurrencyValue.toString()");
-    }
-    toCurrAmount.text = selectedToCurrencyValue;
-  }
-
-  calculateCurrFromValue() {
-    tempCurrencyValue = getConvertedAmount(
-        selectedFromCurrencyValue, selectedToCurrencyValue, toCurrAmount.text);
-    fromCurrAmount.text = tempCurrencyValue.toString();
-  }
-
-  calculateCurrtoValue() {
-    tempCurrencyValue = getConvertedAmount(selectedToCurrencyValue,
-        selectedFromCurrencyValue, fromCurrAmount.text);
-    toCurrAmount.text = tempCurrencyValue.toString();
-  }
-
-  void switchCaseCurrandVal() {
-    // save to temp variable
-    tempCurrency = selectedFromCurrency;
-    tempCurrencyValue = num.parse(fromCurrAmount.text);
-
-    // switch from 2 to
-    selectedFromCurrency = selectedToCurrency;
-    fromCurrAmount.text = toCurrAmount.text;
-    updateFromCurrencyValue(); // Update the values for the switched from currency
-
-    // switch to 2 from using temp
-    selectedToCurrency = tempCurrency;
-    toCurrAmount.text = tempCurrencyValue.toString();
-    updateToCurrencyValue(); // Update the values for the switched to currency
-    update();
   }
 }
