@@ -207,7 +207,8 @@ class CurrencyConvertorView extends StatelessWidget {
                   height: 40,
                 ),
                 const Text(
-                    "Note: Initial Values of all currencies are against PKR = 1"),
+                    "Note: Initial Values of all currencies are against PKR 1"),
+
                 // CustomTextField(
                 //   keyboardType: TextInputType.number,
                 //   controller: controller.convertingAmountController,

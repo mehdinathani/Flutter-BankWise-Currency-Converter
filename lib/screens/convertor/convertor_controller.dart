@@ -22,6 +22,8 @@ class ConverterController extends GetxController {
   num convertedAmount = 0;
   String tempCurrency = "";
   num tempCurrencyValue = 0;
+  String displayToCurrValue = "";
+  String displayFromCurrValue = "";
 
   final apiKey = GoogleApiConfig.apiKey;
   final spreadsheetId = GoogleApiConfig.SpreadsheetID;
@@ -160,12 +162,14 @@ class ConverterController extends GetxController {
   calculateCurrFromValue() {
     tempCurrencyValue = getConvertedAmount(
         selectedFromCurrencyValue, selectedToCurrencyValue, toCurrAmount.text);
+    displayFromCurrValue = tempCurrencyValue.toStringAsFixed(4);
     fromCurrAmount.text = tempCurrencyValue.toString();
   }
 
   calculateCurrtoValue() {
     tempCurrencyValue = getConvertedAmount(selectedToCurrencyValue,
         selectedFromCurrencyValue, fromCurrAmount.text);
+    displayToCurrValue = tempCurrencyValue.toStringAsFixed(4);
     toCurrAmount.text = tempCurrencyValue.toString();
   }
 
